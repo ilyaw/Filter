@@ -43,8 +43,10 @@ struct ImagePicker: UIViewControllerRepresentable {
                 // cheking image can be loaded
                 if results.first!.itemProvider.canLoadObject(ofClass: UIImage.self) {
                     results.first!.itemProvider.loadObject(ofClass: UIImage.self) { image, error in
-                        self.parent.imageData = (image as! UIImage).pngData()!
-                        self.parent.picker.toggle()
+                        DispatchQueue.main.async {
+                            self.parent.imageData = (image as! UIImage).pngData()!
+                            self.parent.picker.toggle()
+                        }
                     }
                 }
                 
