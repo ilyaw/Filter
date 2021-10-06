@@ -13,7 +13,18 @@ struct Home: View {
     
     var body: some View {
         VStack {
-            if !homeData.allImages.isEmpty {
+            if !homeData.allImages.isEmpty && homeData.mainView != nil {
+                
+                Image(uiImage: homeData.mainView.image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: UIScreen.main.bounds.width)
+                
+                Slider(value: $homeData.value)
+                    .padding()
+                    .opacity(homeData.mainView.isEditable ? 1 : 0)
+                    .disabled(homeData.mainView.isEditable ? false : true)
+                
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 20) {
                         ForEach(homeData.allImages) { (filtered) in
@@ -21,6 +32,11 @@ struct Home: View {
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(width: 200, height: 200)
+                                .onTapGesture {
+                                    homeData.value = 1.0
+                                    homeData.mainView = filtered
+                                }
+                          
                         }
                     }.padding()
                    
@@ -31,6 +47,9 @@ struct Home: View {
                 ProgressView()
             }
         }
+        .onChange(of: homeData.value, perform: { (_) in
+            homeData.updateEffect()
+        })
         .onChange(of: homeData.imageData, perform: { (_) in
             // when ever image is changed firing loadimage
             
