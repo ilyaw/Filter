@@ -15,6 +15,8 @@ struct Home: View {
         VStack {
             if !homeData.allImages.isEmpty && homeData.mainView != nil {
                 
+                Spacer(minLength: 0)
+                
                 Image(uiImage: homeData.mainView.image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
@@ -36,10 +38,10 @@ struct Home: View {
                                     homeData.value = 1.0
                                     homeData.mainView = filtered
                                 }
-                          
+                            
                         }
                     }.padding()
-                   
+                    
                 }
             } else if homeData.imageData.count == 0 {
                 Text("Pick An Image To Process :)")
@@ -55,6 +57,7 @@ struct Home: View {
             
             // clear existing data
             homeData.allImages.removeAll()
+            homeData.mainView = nil
             homeData.loadFilter()
         })
         .toolbar {
@@ -66,6 +69,17 @@ struct Home: View {
                     Image(systemName: "photo")
                         .font(.title2)
                 }
+            }
+            
+            // Saving image
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    UIImageWriteToSavedPhotosAlbum(homeData.mainView.image, nil, nil, nil)
+                } label: {
+                    Image(systemName: "square.and.arrow.up.fill")
+                        .font(.title2)
+                }
+                .disabled(homeData.mainView == nil)
             }
         }
         .sheet(isPresented: $homeData.imagePicker) {

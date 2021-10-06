@@ -14,7 +14,7 @@ struct ContentView: View {
                 .navigationTitle("Filter")
                 .preferredColorScheme(.dark)
                 
-        }
+        }.navigationViewStyle(.stack)
     }
 }
 

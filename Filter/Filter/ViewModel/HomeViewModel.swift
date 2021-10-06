@@ -31,7 +31,7 @@ class HomeViewModel: ObservableObject {
     ]
     
     func loadFilter() {
-        let context = CIContext()
+//        let context = CIContext()
         
         filters.forEach { (filter) in
             
@@ -45,7 +45,7 @@ class HomeViewModel: ObservableObject {
                 guard let newImage = filter.outputImage else { return }
                 
                 // creating UIImage
-                let cgimage = context.createCGImage(newImage, from: newImage.extent)
+                let cgimage = self.context.createCGImage(newImage, from: newImage.extent)
                 
                 let isEditable = filter.inputKeys.count > 1
                 
@@ -64,9 +64,11 @@ class HomeViewModel: ObservableObject {
         }
     }
     
+    var context = CIContext()
+    
     func updateEffect() {
         
-        let context = CIContext()
+//        let context = CIContext()
         
         filters.forEach { (filter) in
             
@@ -91,22 +93,13 @@ class HomeViewModel: ObservableObject {
                     filter.setValue(self.value, forKey: kCIInputIntensityKey)
                 }
                 
-//                if filter.inputKeys.contains("inputImage") {
-//                    filter.setValue(self.value, forKey: kCIInputImageKey)
-//                }
-                
-                
                 guard let newImage = filter.outputImage else { return }
                 
                 // creating UIImage
-                let cgimage = context.createCGImage(newImage, from: newImage.extent)
+                let cgimage = self.context.createCGImage(newImage, from: newImage.extent)
              
-                
                 DispatchQueue.main.async {
-                    
-                    // update view
                     self.mainView.image = UIImage(cgImage: cgimage!)
-                    
                 }
             }
         }
